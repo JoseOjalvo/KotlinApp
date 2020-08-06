@@ -11,6 +11,6 @@ class WeatherModelResponse {
     var initialDate : String = ""
 
     @SerializedName("dataseries")
-    var weatherDetailedListData : WeatherResponseListData = WeatherResponseListData()
+    var weatherDetailedListData = arrayListOf<WeatherResponseListData>()
 
 }

@@ -3,8 +3,11 @@ package com.example.weatherapp.views.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieDrawable
 import com.example.weatherapp.R
 import com.example.weatherapp.model.WeatherModelResponse
@@ -39,6 +42,9 @@ class MainActivity : AppCompatActivity() {
     private fun init() {
         spinner.setAnimation("loader.json")
         viewModel.init(0.0, 0.0)
+
+        weatherList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+
     }
 
     private fun initView(data: WeatherModelResponse) {

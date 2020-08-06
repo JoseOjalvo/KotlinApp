@@ -18,6 +18,7 @@ buildscript {
         lottieVersion = '2.7.0'
         ktxVersion = '1.2.5'
         rxJavaVersion = '2.1.0'
+        glideVersion = '4.9.0'
     }
 }
 
