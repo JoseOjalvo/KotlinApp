@@ -1,9 +1,11 @@
 package com.example.weatherapp.views.activities
 
 import android.animation.Animator
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherapp.R
 import com.example.weatherapp.Utils.Constants
@@ -17,30 +19,27 @@ import org.koin.core.context.startKoin
 /**
  * Created by joseojalvo on 2020-08-05
  */
-class ApplicationActivity : AppCompatActivity() {
+class ApplicationActivity : Activity() {
 
 // =================================================================================================
 // Config
 // =================================================================================================
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_screen)
 
+        Log.d("onresume", "splash")
         initKoin()
 
-        initSplash()
+        initSplashListener()
     }
 
 // =================================================================================================
 // Initialization methods
 // =================================================================================================
 
-    private fun initSplash() {
-        splash.setAnimation("splash.json")
-        splash.playAnimation()
-        splash.repeatCount = Constants.TIMES_SPLASH_PLAYED
-
+    private fun initSplashListener() {
         splash.addAnimatorListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
             }

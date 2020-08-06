@@ -1,10 +1,13 @@
 package com.example.weatherapp.repository.datasource
 
+import android.util.Log
 import com.example.weatherapp.Utils.Constants
 import com.example.weatherapp.model.WeatherModelQuery
 import com.example.weatherapp.model.WeatherModelResponse
 import com.example.weatherapp.repository.repositories.api.ApiRepository
 import io.reactivex.Observable
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,23 +33,19 @@ class WeatherDataSource {
 // =================================================================================================
 
     /**
-     *
+     * Retrieves weather data from API and saves
+     * the data in [WeatherModelResponse]
      */
     fun getWeatherData(input: WeatherModelQuery): Observable<WeatherModelResponse> {
 
         parseData(input)
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val service = retrofit.create(ApiRepository::class.java)
+        val service = initServiceLog().create(ApiRepository::class.java)
 
         val call = service.getWeather(longitude, latitude, product, output)
 
 
-        return Observable.create { emitter ->
+        return Observable.create {emitter ->
 
             call.enqueue(object : Callback<WeatherModelResponse> {
                 override fun onResponse(
@@ -59,7 +58,7 @@ class WeatherDataSource {
                 }
 
                 override fun onFailure(call: Call<WeatherModelResponse>, t: Throwable) {
-
+                    Log.d("SERVICE_FAILURE", t.message!!)
                 }
             })
         }
@@ -69,13 +68,27 @@ class WeatherDataSource {
 //  Private methods
 // =================================================================================================
 
-    /**
-     *
-     */
-    fun parseData(data: WeatherModelQuery) {
+    private fun parseData(data: WeatherModelQuery) {
         latitude = data.latitude
         longitude = data.longitude
         product = data.product
         output = data.output
+    }
+
+    private fun initServiceLog(): Retrofit {
+
+        val interceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
     }
 }

@@ -11,8 +11,6 @@ class Constants {
         const val PRODUCT: String = "civil"
         const val OUTPUT: String = "json"
 
-        const val TIMES_SPLASH_PLAYED: Int = 2
-
         const val TEMPERATURE_UNIT: String = "ºC"
 
         const val RAIN_AMOUNT_0 : String = "0"
@@ -25,5 +23,10 @@ class Constants {
         const val RAIN_AMOUNT_7 : String = "30-50"
         const val RAIN_AMOUNT_8 : String = "50-75"
         const val RAIN_AMOUNT_9 : String = "<75"
+
+        const val LOADER_NAME : String = "loader.json"
+
+        const val LONGITUDE : Double = 41.388
+        const val LATITUDE : Double = 2.158
     }
 }

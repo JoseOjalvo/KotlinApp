@@ -12,7 +12,15 @@ import org.koin.core.inject
  */
 class WeatherRepositoryImpl : WeatherRepository {
 
+// =================================================================================================
+//  Attributes
+// =================================================================================================
+
     val datasource : WeatherDataSource by inject()
+
+// =================================================================================================
+//  Datasource method
+// =================================================================================================
 
     override fun getWeatherData(input : WeatherModelQuery): Observable<WeatherModelResponse> {
         return datasource.getWeatherData(input)

@@ -18,17 +18,15 @@ open class WeatherViewModel : BaseViewModel() {
 //  Attributes
 // =================================================================================================
 
+    val processStatus: MutableLiveData<Boolean> = MutableLiveData()
     val useCase: WeatherUseCase by inject()
-
     val weatherData: MutableLiveData<WeatherModelResponse> by lazy {
         MutableLiveData<WeatherModelResponse>().also {
             retrieveData()
         }
     }
 
-    val processStatus : MutableLiveData<Boolean> = MutableLiveData()
-
-    var queryModel: WeatherModelQuery = WeatherModelQuery()
+    private var queryModel: WeatherModelQuery = WeatherModelQuery()
 
 // =================================================================================================
 //  REST methods

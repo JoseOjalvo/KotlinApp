@@ -9,17 +9,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
 import com.example.weatherapp.Utils.Constants
 import com.example.weatherapp.model.WeatherModelResponse
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 /**
  * Created by joseojalvo on 2020-08-06
  */
-class WeatherAdapter(var data: WeatherModelResponse) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class WeatherAdapter(private var data: WeatherModelResponse) :
+    RecyclerView.Adapter<WeatherAdapter.ViewHolder>() {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+// =================================================================================================
+//  Viewholder class
+// =================================================================================================
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        // =================================================================================================
+        //  Views
+        // =================================================================================================
 
         fun bindItem(data: WeatherModelResponse, position: Int) {
             val weatherIcon: ImageView = itemView.findViewById(R.id.weatherIcon)
@@ -34,10 +39,13 @@ class WeatherAdapter(var data: WeatherModelResponse) :
 
             temperature.text = data.weatherDetailedListData[position].temp2m.toString()
             temperatureUnit.text = Constants.TEMPERATURE_UNIT
-
         }
 
-        fun setWeatherIcon(weather: String, weatherIcon: ImageView) {
+        // =================================================================================================
+        //  Attributes
+        // =================================================================================================
+
+        private fun setWeatherIcon(weather: String, weatherIcon: ImageView) {
             when (weather) {
                 "clearday",
                 "clearnight" -> weatherIcon.setImageResource(R.mipmap.sun)
@@ -68,7 +76,11 @@ class WeatherAdapter(var data: WeatherModelResponse) :
             }
         }
 
-        fun setRainAmount(rainAmount: Int, rainAmountText: TextView) {
+        // =================================================================================================
+        //  Private methods
+        // =================================================================================================
+
+        private fun setRainAmount(rainAmount: Int, rainAmountText: TextView) {
             when (rainAmount) {
                 0 -> rainAmountText.text = Constants.RAIN_AMOUNT_0
                 1 -> rainAmountText.text = Constants.RAIN_AMOUNT_1
@@ -83,21 +95,29 @@ class WeatherAdapter(var data: WeatherModelResponse) :
             }
         }
 
-        fun setDate(date: String, dateText: TextView) {
+        private fun setDate(date: String, dateText: TextView) {
 
-            var parsedDate: String = date.removeRange(date.length - 3, date.length - 1)
+            val parsedDate: String = date.removeRange(date.length - 3, date.length - 1)
 
-            var year = parsedDate.substring(0, 3)
-            var month = parsedDate.substring(4, 6)
-            var day = parsedDate.substring(7, parsedDate.length - 1)
+            val year = parsedDate.substring(0, 4)
+            val month = parsedDate.substring(4, 6)
 
-            var finalDate = (day.toInt() + adapterPosition).toString() + "-" + month + "-" + year
+            var day = parsedDate.substring(7, parsedDate.length)
+            day = (day.toInt() + adapterPosition).toString()
+            if (day.length == 1) {
+                day = "0$day"
+            }
+            val finalDate = "$day/$month/$year"
             dateText.text = finalDate
 
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+// =================================================================================================
+//  Recyclerview methods
+// =================================================================================================
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
             R.layout.card_content, parent,
             false
@@ -110,7 +130,7 @@ class WeatherAdapter(var data: WeatherModelResponse) :
         return data.weatherDetailedListData.size
     }
 
-    override fun onBindViewHolder(holder: WeatherAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindItem(data, position)
     }
 

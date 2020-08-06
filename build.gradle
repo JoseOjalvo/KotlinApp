@@ -15,10 +15,11 @@ buildscript {
     project.ext {
         retrofitVersion = '2.8.1'
         koinVersion = '2.1.5'
-        lottieVersion = '2.7.0'
+        lottieVersion = '3.4.0'
         ktxVersion = '1.2.5'
         rxJavaVersion = '2.1.0'
         glideVersion = '4.9.0'
+        okhttpVersion = '4.5.0'
     }
 }
 

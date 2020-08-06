@@ -1,15 +1,15 @@
 package com.example.weatherapp.views.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.LinearLayout
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieDrawable
 import com.example.weatherapp.R
+import com.example.weatherapp.Utils.Constants
+import com.example.weatherapp.adapters.WeatherAdapter
 import com.example.weatherapp.model.WeatherModelResponse
 import com.example.weatherapp.viewmodel.WeatherViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 //  Attributes
 // =================================================================================================
 
-    val viewModel: WeatherViewModel by viewModels()
+    private val viewModel: WeatherViewModel by viewModels()
 
 // =================================================================================================
 //  Config methods
@@ -29,26 +29,37 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         init()
         observeData()
     }
-
 
 // =================================================================================================
 //  Initialization methods
 // =================================================================================================
 
     private fun init() {
-        spinner.setAnimation("loader.json")
-        viewModel.init(0.0, 0.0)
-
-        weatherList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-
+        spinner.setAnimation(Constants.LOADER_NAME)
+        viewModel.init(Constants.LONGITUDE, Constants.LATITUDE)
     }
 
     private fun initView(data: WeatherModelResponse) {
+        startListView(data)
+    }
 
+    /**
+     * Initialize the RecyclerView with [WeatherModelResponse]
+     * data retrieved from service
+     */
+    private fun startListView(data: WeatherModelResponse) {
+
+        with(weatherList) {
+            layoutManager = LinearLayoutManager(
+                this@MainActivity,
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+            adapter = WeatherAdapter(data)
+        }
     }
 
 // =================================================================================================

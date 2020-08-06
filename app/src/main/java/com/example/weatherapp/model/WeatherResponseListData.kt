@@ -17,7 +17,7 @@ class WeatherResponseListData {
     var lifted_index: Int = 0
 
     @SerializedName("prec_type")
-    var prec_type: Int = 0
+    var prec_type: String = ""
 
     @SerializedName("prec_amount")
     var prec_amount: Int = 0
@@ -26,7 +26,7 @@ class WeatherResponseListData {
     var temp2m: Int = 0
 
     @SerializedName("rh2m")
-    var rh2m: Int = 0
+    var rh2m: String = ""
 
     @SerializedName("wind10m")
     var wind10m: WindModelData = WindModelData()

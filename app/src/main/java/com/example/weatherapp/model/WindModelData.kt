@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 class WindModelData {
 
     @SerializedName("direction")
-    private var direction : Int = 0
+    private var direction : String = ""
 
     @SerializedName("speed")
     private var speed : Int = 0
