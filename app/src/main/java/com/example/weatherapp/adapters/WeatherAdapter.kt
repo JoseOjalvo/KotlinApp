@@ -1,6 +1,5 @@
 package com.example.weatherapp.adapters
 
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -8,7 +7,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
 import com.example.weatherapp.Utils.Constants
+import com.example.weatherapp.extensions.inflate
 import com.example.weatherapp.model.WeatherModelResponse
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by joseojalvo on 2020-08-06
@@ -22,6 +25,8 @@ class WeatherAdapter(private var data: WeatherModelResponse) :
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        private val calendar = Calendar.getInstance()
+
         // =================================================================================================
         //  Views
         // =================================================================================================
@@ -31,10 +36,14 @@ class WeatherAdapter(private var data: WeatherModelResponse) :
             val temperature: TextView = itemView.findViewById(R.id.temperature)
             val temperatureUnit: TextView = itemView.findViewById(R.id.temperature_unit)
             val rainAmount: TextView = itemView.findViewById(R.id.rainAmount)
+            val rainAmountIcon: ImageView = itemView.findViewById(R.id.rainAmountIcon)
+            val rainAmountUnit: TextView = itemView.findViewById(R.id.rainAmountUnit)
             val date: TextView = itemView.findViewById(R.id.date)
 
             setWeatherIcon(data.weatherDetailedListData[position].weather, weatherIcon)
             setRainAmount(data.weatherDetailedListData[position].prec_amount, rainAmount)
+            setRainAmountIcon(rainAmountIcon)
+            setRainAmountUnit(rainAmountUnit)
             setDate(data.initialDate, date)
 
             temperature.text = data.weatherDetailedListData[position].temp2m.toString()
@@ -46,33 +55,17 @@ class WeatherAdapter(private var data: WeatherModelResponse) :
         // =================================================================================================
 
         private fun setWeatherIcon(weather: String, weatherIcon: ImageView) {
-            when (weather) {
-                "clearday",
-                "clearnight" -> weatherIcon.setImageResource(R.mipmap.sun)
+            when {
+                Constants.clearDay.contains(weather) -> weatherIcon.setImageResource(R.mipmap.sun)
 
-                "humidday",
-                "humidnight",
-                "pcloudyday",
-                "pcloudynight" -> weatherIcon.setImageResource(R.mipmap.partly_cloudy)
+                Constants.cloudyDay.contains(weather)
+                -> weatherIcon.setImageResource(R.mipmap.partly_cloudy)
 
-                "mcloudyday",
-                "mcloudynight",
-                "cloudyday",
-                "cloudynight" -> weatherIcon.setImageResource(R.mipmap.clouds)
+                Constants.cloudDay.contains(weather)
+                -> weatherIcon.setImageResource(R.mipmap.clouds)
 
-                "lightrainday",
-                "lightrainnight",
-                "oshowerday",
-                "oshowernight",
-                "ishowerday",
-                "ishowernight",
-                "rainday",
-                "rainnight" -> weatherIcon.setImageResource(R.mipmap.rain)
-
-                "snowday",
-                "snownight",
-                "rainsnowday",
-                "rainsnownight" -> weatherIcon.setImageResource(R.mipmap.snow)
+                Constants.rainDay.contains(weather) -> weatherIcon.setImageResource(R.mipmap.rain)
+                Constants.snowDay.contains(weather) -> weatherIcon.setImageResource(R.mipmap.snow)
             }
         }
 
@@ -97,19 +90,26 @@ class WeatherAdapter(private var data: WeatherModelResponse) :
 
         private fun setDate(date: String, dateText: TextView) {
 
-            val parsedDate: String = date.removeRange(date.length - 3, date.length - 1)
+            val dateParser = SimpleDateFormat(Constants.FORMAT_IN, Locale(Constants.REGION, Constants.COUNTRY))
+            val dateFormatter = SimpleDateFormat(Constants.FORMAT_OUT, Locale(Constants.REGION, Constants.COUNTRY))
 
-            val year = parsedDate.substring(0, 4)
-            val month = parsedDate.substring(4, 6)
+            val dateViewText = DateFormat.getDateInstance(
+                DateFormat.MEDIUM,
+                Locale(Constants.REGION, Constants.COUNTRY)
+            )
 
-            var day = parsedDate.substring(7, parsedDate.length)
-            day = (day.toInt() + adapterPosition).toString()
-            if (day.length == 1) {
-                day = "0$day"
-            }
-            val finalDate = "$day/$month/$year"
-            dateText.text = finalDate
+            val parsedDate = dateFormatter.format(dateParser.parse(date)!!)
+            calendar.time = dateFormatter.parse(parsedDate)!!
+            calendar.add(Calendar.DATE, adapterPosition + 1)
+            dateText.text = dateViewText.format(calendar.time)
+        }
 
+        private fun setRainAmountIcon(rainAmountIcon: ImageView) {
+            rainAmountIcon.setImageResource(R.mipmap.rain_amount)
+        }
+
+        private fun setRainAmountUnit(rainAmountUnit: TextView) {
+            rainAmountUnit.text = Constants.RAIN_UNIT
         }
     }
 
@@ -118,10 +118,7 @@ class WeatherAdapter(private var data: WeatherModelResponse) :
 // =================================================================================================
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(
-            R.layout.card_content, parent,
-            false
-        )
+        val view = parent.inflate(R.layout.card_content)
 
         return ViewHolder(view)
     }

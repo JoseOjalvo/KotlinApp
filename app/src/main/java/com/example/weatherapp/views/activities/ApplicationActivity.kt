@@ -29,7 +29,6 @@ class ApplicationActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_screen)
 
-        Log.d("onresume", "splash")
         initKoin()
 
         initSplashListener()

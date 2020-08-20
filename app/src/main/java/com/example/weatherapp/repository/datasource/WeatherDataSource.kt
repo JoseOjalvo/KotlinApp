@@ -45,7 +45,7 @@ class WeatherDataSource {
         val call = service.getWeather(longitude, latitude, product, output)
 
 
-        return Observable.create {emitter ->
+        return Observable.create { emitter ->
 
             call.enqueue(object : Callback<WeatherModelResponse> {
                 override fun onResponse(
@@ -58,7 +58,7 @@ class WeatherDataSource {
                 }
 
                 override fun onFailure(call: Call<WeatherModelResponse>, t: Throwable) {
-                    Log.d("SERVICE_FAILURE", t.message!!)
+                    Log.d(Constants.SERVICE_FAILURE, t.message!!)
                 }
             })
         }

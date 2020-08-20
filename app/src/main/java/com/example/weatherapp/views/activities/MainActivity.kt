@@ -10,6 +10,8 @@ import com.airbnb.lottie.LottieDrawable
 import com.example.weatherapp.R
 import com.example.weatherapp.Utils.Constants
 import com.example.weatherapp.adapters.WeatherAdapter
+import com.example.weatherapp.extensions.gone
+import com.example.weatherapp.extensions.visible
 import com.example.weatherapp.model.WeatherModelResponse
 import com.example.weatherapp.viewmodel.WeatherViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -43,6 +45,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView(data: WeatherModelResponse) {
+        initBanner(data)
         startListView(data)
     }
 
@@ -60,6 +63,10 @@ class MainActivity : AppCompatActivity() {
             )
             adapter = WeatherAdapter(data)
         }
+    }
+
+    private fun initBanner(data: WeatherModelResponse) {
+        banner.init(data)
     }
 
 // =================================================================================================
@@ -84,14 +91,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showLoad() {
-        spinner.visibility = View.VISIBLE
+        spinner.visible()
         spinner.playAnimation()
         spinner.repeatCount = LottieDrawable.INFINITE
     }
 
     private fun hideLoad() {
         spinner.repeatCount = 0
-        spinner.visibility = View.GONE
+        spinner.gone()
     }
 
 }
