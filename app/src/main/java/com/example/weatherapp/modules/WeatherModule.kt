@@ -1,10 +1,11 @@
 package com.example.weatherapp.modules
 
-import com.example.weatherapp.repository.datasource.WeatherDataSource
-import com.example.weatherapp.repository.implementation.WeatherRepositoryImpl
-import com.example.weatherapp.repository.repositories.WeatherRepository
-import com.example.weatherapp.usecase.WeatherUseCase
-import com.example.weatherapp.viewmodel.WeatherViewModel
+import com.example.domain.repository.datasource.WeatherDataSource
+import com.example.domain.repository.implementation.WeatherRepositoryImpl
+import com.example.domain.repository.repositories.WeatherRepository
+import com.example.domain.usecases.WeatherUseCase
+import com.example.presentation.ui.features.activities.viewmodel.WeatherViewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.KoinComponent
 import org.koin.dsl.module
 
@@ -22,7 +23,7 @@ class WeatherModule : KoinComponent {
         }
 
         val viewmodelModule = module {
-            factory {
+            viewModel {
                 WeatherViewModel()
             }
         }
