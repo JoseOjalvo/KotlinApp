@@ -1,6 +1,5 @@
 package com.example.domain.repository.datasource
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.commons.constants.Constants
 import com.example.commons.constants.Constants.EMPTY_STRING
@@ -36,8 +35,7 @@ class WeatherDataSource {
 // =================================================================================================
 
     /**
-     * Retrieves weather data from API and saves
-     * the data in [WeatherModelResponse]
+     * Retrieves weather data from an external API and saves the data in [WeatherModelResponse]
      */
     fun getWeatherData(input: WeatherModelQuery): MutableLiveData<Resource<WeatherModelResponse?>> {
 

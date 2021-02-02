@@ -44,6 +44,10 @@ class ApplicationActivity : BaseActivity<SplashScreenBinding>() {
 
     /**
      * Creates a listener for the splash animation status
+     * 1.- onAnimationRepeat will be triggered after every iteration of the animation
+     * 2.- onAnimationEnd will be triggered when the animation ends
+     * 3.- onAnimationCancel will be triggered if the animation is canceled
+     * 4.- onAnimationStart will be triggered when the animation is started
      */
     private fun initSplashListener() {
         binding.splash.addAnimatorListener(object : Animator.AnimatorListener {

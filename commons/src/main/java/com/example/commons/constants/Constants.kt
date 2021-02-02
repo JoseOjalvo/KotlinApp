@@ -4,6 +4,9 @@ package com.example.commons.constants
  * Created by joseojalvo on 2020-08-05
  */
 object Constants {
+    /**
+     * Object classes are the same as static in Java
+     */
 // =================================================================================================
 //  URL Parameters
 // =================================================================================================

@@ -17,13 +17,15 @@ class WeatherRepositoryImpl : WeatherRepository {
 //  Attributes
 // =================================================================================================
 
-    private val datasource : WeatherDataSource by inject()
+    private val datasource: WeatherDataSource by inject()
 
 // =================================================================================================
 //  Datasource method
 // =================================================================================================
 
-    override fun getWeatherData(input: WeatherModelQuery): MutableLiveData<Resource<WeatherModelResponse?>> {
+    override fun getWeatherData(
+        input: WeatherModelQuery
+    ): MutableLiveData<Resource<WeatherModelResponse?>> {
         return datasource.getWeatherData(input)
     }
 }

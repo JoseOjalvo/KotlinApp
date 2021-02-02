@@ -1,5 +1,6 @@
 package com.example.data.model
 
+import com.example.commons.constants.Constants.EMPTY_STRING
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -8,7 +9,7 @@ import com.google.gson.annotations.SerializedName
 class WindModelData {
 
     @SerializedName("direction")
-    private var direction : String = ""
+    private var direction : String = EMPTY_STRING
 
     @SerializedName("speed")
     private var speed : Int = 0

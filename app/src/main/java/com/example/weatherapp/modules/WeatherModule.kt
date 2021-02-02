@@ -14,6 +14,16 @@ import org.koin.dsl.module
  */
 class WeatherModule : KoinComponent {
 
+    /**
+     * Modules are a way to separate all the elements to be instantiated in the Application class,
+     * they are used to specify Koin which classes will be injected.
+     *
+     * Single -> Specifies that the following class will be instantiated as a Singleton, so Koin
+     * will keep that class and its values in local memory until the app process is finished.
+     *
+     * ViewModel -> Specifies that the following class will be instantiated as a ViewModel
+     */
+
     object AppModules {
 
         val useCaseModule = module {

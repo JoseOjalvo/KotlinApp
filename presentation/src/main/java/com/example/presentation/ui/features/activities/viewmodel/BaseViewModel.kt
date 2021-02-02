@@ -15,6 +15,9 @@ abstract class BaseViewModel : ViewModel(), KoinComponent {
 //  REST methods
 // =================================================================================================
 
+    /**
+     * Method to be override in the ViewModel to call endpoints
+     */
     abstract fun retrieveData(activity: AppCompatActivity)
 
 // =================================================================================================

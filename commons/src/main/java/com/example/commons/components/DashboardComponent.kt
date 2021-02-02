@@ -21,7 +21,7 @@ import java.util.*
 /**
  * Created by joseojalvo on 2020-08-19
  *
- * Component to show the data of the first position of the data list
+ * Custom component to show the data of the first position of the data list
  */
 class DashboardComponent @JvmOverloads constructor(
     context: Context,
@@ -75,7 +75,7 @@ class DashboardComponent @JvmOverloads constructor(
 // =================================================================================================
 
     /**
-     * Called to bind the layout
+     * Called to bind the layout and inflate the view
      */
     private fun bindLayout() {
         View.inflate(context, R.layout.dashboard_banner, this)

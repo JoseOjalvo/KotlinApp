@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">utils</string>
+    <string name="td_dialog_permission_denied_title">Permiso denegado</string>
+    <string name="td_dialog_permission_denied_body">Es importante que aceptes los permisos porque la función que has seleccionado puedo funcionar.\n¿Está seguro de denegar el permiso?</string>
+    <string name="td_dialog_permission_denied_sure">Seguro</string>
+    <string name="td_dialog_permission_denied_re_try">Reintentar</string>
+    <string name="td_dialog_permission_denied_again">Conceder permisos en ajustes</string>
+    <string name="td_dialog_permission_denied_settings">Ajustes</string>
 </resources>

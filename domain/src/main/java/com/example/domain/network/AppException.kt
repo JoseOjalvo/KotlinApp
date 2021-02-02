@@ -8,4 +8,4 @@ class AppException(
 
         val exception: Throwable?
 
-): Exception();
+): Exception()
