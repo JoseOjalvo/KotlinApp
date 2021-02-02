@@ -39,6 +39,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 //  Config methods
 // =================================================================================================
 
+    /**
+     * Creates a view binding instance with the layout of the current activity
+     */
     override fun setBinding(inflater: LayoutInflater): ActivityMainBinding {
         return ActivityMainBinding.inflate(inflater)
     }
@@ -91,7 +94,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 // =================================================================================================
 
     /**
-     * Observes the data received from the viewmodel, if a change is notified the observer will be
+     * Observes the data received from the ViewModel, if a change is notified the observer will be
      * triggered
      */
     private fun observeData() {

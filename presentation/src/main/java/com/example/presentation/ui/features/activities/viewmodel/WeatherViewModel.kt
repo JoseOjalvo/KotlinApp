@@ -46,6 +46,9 @@ open class WeatherViewModel : BaseViewModel() {
 //  REST methods
 // =================================================================================================
 
+    /**
+     * Calls an endpoint to retrieve the weather data using coroutines
+     */
     override fun retrieveData(activity: AppCompatActivity) {
         viewModelScope.launch(Dispatchers.Main) {
             val result: MutableLiveData<Resource<WeatherModelResponse?>> =

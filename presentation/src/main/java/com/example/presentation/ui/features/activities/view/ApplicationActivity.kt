@@ -46,8 +46,7 @@ class ApplicationActivity : BaseActivity<SplashScreenBinding>() {
      * Creates a listener for the splash animation status
      */
     private fun initSplashListener() {
-        findViewById<LottieAnimationView>(R.id.splash).addAnimatorListener(
-            object : Animator.AnimatorListener {
+        binding.splash.addAnimatorListener(object : Animator.AnimatorListener {
                 override fun onAnimationRepeat(animation: Animator?) {
                 }
 
