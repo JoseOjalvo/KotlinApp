@@ -10,27 +10,15 @@ import com.example.commons.constants.Constants.COUNTRY
 import com.example.commons.constants.Constants.EMPTY_STRING
 import com.example.commons.constants.Constants.FORMAT_IN
 import com.example.commons.constants.Constants.FORMAT_OUT
-import com.example.commons.constants.Constants.RAIN_AMOUNT_0
-import com.example.commons.constants.Constants.RAIN_AMOUNT_1
-import com.example.commons.constants.Constants.RAIN_AMOUNT_2
-import com.example.commons.constants.Constants.RAIN_AMOUNT_3
-import com.example.commons.constants.Constants.RAIN_AMOUNT_4
-import com.example.commons.constants.Constants.RAIN_AMOUNT_5
-import com.example.commons.constants.Constants.RAIN_AMOUNT_6
-import com.example.commons.constants.Constants.RAIN_AMOUNT_7
-import com.example.commons.constants.Constants.RAIN_AMOUNT_8
-import com.example.commons.constants.Constants.RAIN_AMOUNT_9
 import com.example.commons.constants.Constants.RAIN_UNIT
 import com.example.commons.constants.Constants.REGION
+import com.example.commons.constants.Constants.RESOURCE_NOT_FOUND
 import com.example.commons.constants.Constants.TEMPERATURE_UNIT
-import com.example.commons.constants.Constants.clearDay
-import com.example.commons.constants.Constants.cloudDay
-import com.example.commons.constants.Constants.cloudyDay
-import com.example.commons.constants.Constants.rainDay
-import com.example.commons.constants.Constants.snowDay
 import com.example.data.model.WeatherModelResponse
 import com.example.presentation.R
 import com.example.presentation.databinding.CardContentBinding
+import com.example.utils.date.DateUtils
+import com.example.utils.weather.WeatherUtils
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -48,7 +36,8 @@ class WeatherAdapter(private var data: WeatherModelResponse) :
     /**
      * Lateinit variables are used when we can't initialize it but we don't want it to be nullable,
      * since Kotlin requires that a variable is initialized when declared this is an alternative,
-     * this should be used for variables which value depend on an injection or an init method.
+     * this should be used for variables which value depend on an injection, an init method or
+     * if the initial value will be initialized before it's first use.
      *
      * IMPORTANT: If the variable isn't initialized it'll throw an exception, this shouldn't be a
      * common way to declare variables, only when it's required its use will be accepted!
@@ -76,19 +65,20 @@ class WeatherAdapter(private var data: WeatherModelResponse) :
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (holder.binding is CardContentBinding) {
-            holder.binding.temperature.text =
-                data.weatherDetailedListData[position].temp2m.toString()
+            holder.binding.temperature.text = data.dataseries?.get(position)?.temp2m.toString()
             holder.binding.temperatureUnit.text = TEMPERATURE_UNIT
 
-            setWeatherIcon(
-                data.weatherDetailedListData[position].weather, holder.binding.weatherIcon
-            )
-            setRainAmount(
-                data.weatherDetailedListData[position].prec_amount, holder.binding.rainAmount
-            )
+            data.dataseries?.get(position)?.weather?.let {
+                setWeatherIcon(it, holder.binding.weatherIcon)
+            }
+            data.dataseries?.get(position)?.precAmount?.let {
+                setRainAmount(it, holder.binding.rainAmount)
+            }
+            data.init?.let {
+                setDate(it, holder.binding.date, position)
+            }
             setRainAmountIcon(holder.binding.rainAmountIcon)
             setRainAmountUnit(holder.binding.rainAmountUnit)
-            setDate(data.initialDate, holder.binding.date, position)
         }
     }
 
@@ -97,70 +87,56 @@ class WeatherAdapter(private var data: WeatherModelResponse) :
      * show items
      */
     override fun getItemCount(): Int {
-        return data.weatherDetailedListData.size
+        data.dataseries?.size?.let {
+            return it
+        }
+        return RESOURCE_NOT_FOUND
     }
 
 // =================================================================================================
 //  Private methods
 // =================================================================================================
 
+    /**
+     * Establishes the weather icon based in the weather string received from the endpoint
+     * @param weather key received from the endpoint
+     */
     private fun setWeatherIcon(weather: String, weatherIcon: ImageView) {
-        when {
-            clearDay.contains(weather) -> weatherIcon.setImageResource(R.mipmap.sun)
-
-            cloudyDay.contains(weather)
-            -> weatherIcon.setImageResource(R.mipmap.partly_cloudy)
-
-            cloudDay.contains(weather)
-            -> weatherIcon.setImageResource(R.mipmap.clouds)
-
-            rainDay.contains(weather) -> weatherIcon.setImageResource(R.mipmap.rain)
-            snowDay.contains(weather) -> weatherIcon.setImageResource(R.mipmap.snow)
-        }
+        weatherIcon.setImageResource(WeatherUtils.getWeatherIcon(weather))
     }
 
+    /**
+     * Establishes the rain amount based in the rain amount received from the endpoint
+     * @param rainAmount integer key received from the endpoint that points out the amount of rain
+     * in a single day
+     * @param rainAmountText view that'll prompt the rain amount value
+     */
     private fun setRainAmount(rainAmount: Int, rainAmountText: TextView) {
-        rainAmountText.text = when (rainAmount) {
-            0 -> RAIN_AMOUNT_0
-            1 -> RAIN_AMOUNT_1
-            2 -> RAIN_AMOUNT_2
-            3 -> RAIN_AMOUNT_3
-            4 -> RAIN_AMOUNT_4
-            5 -> RAIN_AMOUNT_5
-            6 -> RAIN_AMOUNT_6
-            7 -> RAIN_AMOUNT_7
-            8 -> RAIN_AMOUNT_8
-            9 -> RAIN_AMOUNT_9
-            else -> EMPTY_STRING
-        }
+        rainAmountText.text = WeatherUtils.getRainAmount(rainAmount)
     }
 
+    /**
+     * Sets the date the card component will show
+     * @param date received from the endpoint, must be formatted and parsed
+     * @param dateText view that will print the date
+     * @param position position of the current component in the recyclerview
+     */
     private fun setDate(date: String, dateText: TextView, position: Int) {
-        val calendar = Calendar.getInstance()
-
-        val dateParser = SimpleDateFormat(FORMAT_IN, Locale(REGION, COUNTRY))
-        val dateFormatter = SimpleDateFormat(FORMAT_OUT, Locale(REGION, COUNTRY))
-
-        val dateViewText = DateFormat.getDateInstance(
-            DateFormat.MEDIUM,
-            Locale(REGION, COUNTRY)
-        )
-
-        var parsedDate = EMPTY_STRING
-        dateParser.parse(date)?.let {
-            parsedDate = dateFormatter.format(it)
-        }
-        dateFormatter.parse(parsedDate)?.let {
-            calendar.time = it
-        }
-        calendar.add(Calendar.DATE, position + 1)
-        dateText.text = dateViewText.format(calendar.time)
+        dateText.text = DateUtils.setDate(date, true, position)
     }
 
+    /**
+     * Establishes the rain amount icon
+     * @param rainAmountIcon image view that'll show the icon
+     */
     private fun setRainAmountIcon(rainAmountIcon: ImageView) {
         rainAmountIcon.setImageResource(R.mipmap.rain_amount)
     }
 
+    /**
+     * Establishes the rain amount measure unit
+     * @param rainAmountUnit view that'll show the rain amount unit
+     */
     private fun setRainAmountUnit(rainAmountUnit: TextView) {
         rainAmountUnit.text = RAIN_UNIT
     }

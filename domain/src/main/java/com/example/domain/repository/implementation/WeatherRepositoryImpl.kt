@@ -23,6 +23,11 @@ class WeatherRepositoryImpl : WeatherRepository {
 //  Datasource method
 // =================================================================================================
 
+    /**
+     * Implements the data source's endpoint method
+     * @param input data to be sent to the endpoint
+     * @return the weather data received from the endpoint
+     */
     override fun getWeatherData(
         input: WeatherModelQuery
     ): MutableLiveData<Resource<WeatherModelResponse?>> {

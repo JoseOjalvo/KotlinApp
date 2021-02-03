@@ -11,6 +11,11 @@ import com.example.domain.repository.repositories.WeatherRepository
  */
 class WeatherUseCase(private val repository : WeatherRepository) : BaseUseCase {
 
+    /**
+     * Implements the repository to call the weather data endpoint
+     * @param input data to be sent to the endpoint
+     * @return the weather data received from the endpoint
+     */
     fun execute(input : WeatherModelQuery) : MutableLiveData<Resource<WeatherModelResponse?>> {
         return repository.getWeatherData(input)
     }

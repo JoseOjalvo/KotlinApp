@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import com.airbnb.lottie.LottieAnimationView
+import com.example.commons.constants.Constants.SPLASH_NAME
 import com.example.presentation.R
 import com.example.presentation.databinding.SplashScreenBinding
 
@@ -27,14 +28,7 @@ class ApplicationActivity : BaseActivity<SplashScreenBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSplashListener()
-    }
-
-    /**
-     * Initializes the splash animation
-     */
-    override fun onResume() {
-        super.onResume()
-        binding.splash.setAnimation("splash.json")
+        binding.splash.setAnimation(SPLASH_NAME)
         binding.splash.playAnimation()
     }
 

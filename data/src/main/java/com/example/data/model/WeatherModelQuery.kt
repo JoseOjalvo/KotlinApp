@@ -6,11 +6,12 @@ import com.example.commons.constants.Constants.PRODUCT
 
 /**
  * Created by joseojalvo on 2020-08-05
+ *
+ * Contains the data that'll be sent to the endpoint
  */
-class WeatherModelQuery {
-
-    var longitude : Double = 0.0
-    var latitude : Double = 0.0
-    var product : String = PRODUCT
-    var output : String = OUTPUT
-}
+class WeatherModelQuery(
+    val longitude: Double?,
+    val latitude: Double?,
+    val product: String?,
+    val output: String?
+)

@@ -55,7 +55,9 @@ object Constants {
 //  File names
 // =================================================================================================
 
-    const val LOADER_NAME: String = "loader.json"
+    const val LOADER_NAME = "loader.json"
+    const val SPLASH_NAME = "splash.json"
+    const val RESOURCE_NOT_FOUND = 0
 
 // =================================================================================================
 //  Location

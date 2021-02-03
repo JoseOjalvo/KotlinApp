@@ -5,34 +5,31 @@ import com.google.gson.annotations.SerializedName
 
 /**
  * Created by joseojalvo on 2020-08-05
+ *
+ * Contains additional data of the weather
  */
-class WeatherResponseListData {
-
-    @SerializedName("timepoint")
-    var timepoint: Int = 0
-
-    @SerializedName("cloudcover")
-    var cloudcover: Int = 0
-
+class WeatherResponseListData(
+    val timepoint: Int?,
+    val cloudcover: Int?,
+    val temp2m: Int?,
+    val rh2m: String?,
+    val wind10m: WindModelData?,
+    val weather: String?,
+    /**
+     * The @SerializedName annotation specifies the name of the field from the JSON received from
+     * the endpoint, it automates the process of parsing the data and automatically fills the field
+     * of the model with the field from the JSON with that same name.
+     * This should only be used when the JSON name parameter doesn't meet our name requirements
+     * or isn't in camel case.
+     * If it isn't added and the variable has the same name as the JSON paramenter it'll be
+     * automatically filled when the data is received.
+     */
     @SerializedName("lifted_index")
-    var lifted_index: Int = 0
+    val liftedIndex: Int?,
 
     @SerializedName("prec_type")
-    var prec_type: String = EMPTY_STRING
+    val precType: String?,
 
     @SerializedName("prec_amount")
-    var prec_amount: Int = 0
-
-    @SerializedName("temp2m")
-    var temp2m: Int = 0
-
-    @SerializedName("rh2m")
-    var rh2m: String = EMPTY_STRING
-
-    @SerializedName("wind10m")
-    var wind10m: WindModelData = WindModelData()
-
-    @SerializedName("weather")
-    var weather: String = EMPTY_STRING
-
-}
+    val precAmount: Int?
+)

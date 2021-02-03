@@ -4,6 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.commons.constants.Constants.LATITUDE
+import com.example.commons.constants.Constants.LONGITUDE
+import com.example.commons.constants.Constants.OUTPUT
+import com.example.commons.constants.Constants.PRODUCT
 import com.example.data.model.WeatherModelQuery
 import com.example.data.model.WeatherModelResponse
 import com.example.domain.network.resource.Resource
@@ -64,7 +68,7 @@ open class WeatherViewModel : BaseViewModel() {
     /**
      * Model used to send the required data to the endpoint
      */
-    var queryModel: WeatherModelQuery = WeatherModelQuery()
+    var queryModel: WeatherModelQuery = WeatherModelQuery(LONGITUDE, LATITUDE, PRODUCT, OUTPUT)
 
 // =================================================================================================
 //  REST methods
@@ -77,11 +81,13 @@ open class WeatherViewModel : BaseViewModel() {
      * Coroutines allow us to have asynchronous tasks that would otherwise block the code for too
      * long, we use them to call the endpoints, as they are asynchronous the main thread keeps
      * working on the UI until the observer is triggered, meaning some data has arrived.
+     *
+     * @param activity required to get the lifecycle owner necessary to observe the endpoint call
      */
     override fun retrieveData(activity: AppCompatActivity) {
         viewModelScope.launch(Dispatchers.Main) {
             val result: MutableLiveData<Resource<WeatherModelResponse?>> =
-                withContext(Dispatchers.IO) { useCase.execute(queryModel) }
+                withContext(Dispatchers.Default) { useCase.execute(queryModel) }
             result.observe(activity, { resource ->
                 postResource(resource, _data)
             })
